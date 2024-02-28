@@ -1,7 +1,9 @@
 package com.priceline.chutes;
 
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class Game {
     private GameConfig config;
     private List<Player> players;
@@ -27,18 +29,18 @@ public class Game {
 
         // This is just some fun output for the user
         if (nextPosition < movedPosition) {
-            System.out.println("Player " + currentPlayer.getName() + " tried to move to position " + movedPosition + " but fell down a chute to position " + nextPosition);
+            log.info("Player " + currentPlayer.getName() + " tried to move to position " + movedPosition + " but fell down a chute to position " + nextPosition);
         } else if (nextPosition > movedPosition) {
-            System.out.println("Player " + currentPlayer.getName() + " moves to position " + movedPosition + " and found a ladder to position " + nextPosition);
+            log.info("Player " + currentPlayer.getName() + " moves to position " + movedPosition + " and found a ladder to position " + nextPosition);
         }
 
         if (nextPosition > config.boardSize){
-            System.out.println("Player " + currentPlayer.getName() + " tried to move to space " + nextPosition);
+            log.info("Player " + currentPlayer.getName() + " tried to move to space " + nextPosition);
         } else {
-            System.out.println("Player " + currentPlayer.getName() + " is at position " + nextPosition);
+            log.info("Player " + currentPlayer.getName() + " is at position " + nextPosition);
             currentPlayer.setPosition(nextPosition);
             if (currentPlayer.getPosition() == config.boardSize) {
-                System.out.println("The winner is player " + currentPlayer.getName());
+                log.info("The winner is player " + currentPlayer.getName());
                 return true;
             }
         }

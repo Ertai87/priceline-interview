@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import lombok.extern.log4j.Log4j2;
+
 /*
  * Similar to the "Board" class from the original implementation.  However, the "board" does not actually need to exist.
  * The only thing that is required is some tracking of how big the board is, to make sure players don't fall off the edge,
  * and the mapping of where the special tiles lead.  So the actual "board" is just those 2 things and the rest is abstracted out.
  */
 
+ @Log4j2
 public class GameConfig {
     Random random = new Random();
 
@@ -26,25 +29,25 @@ public class GameConfig {
         Properties appConfig = new Properties();
         try {
             appConfig.load(new FileInputStream("./src/main/resources/application.config"));
-            System.out.println("Found application config, using values found...");
+            log.debug("Found application config, using values found...");
 
             // Try to set config using appconfig, use default values on any error; there's probably a library for this but nothing interesting came up on Google
             try {
                 boardSize = Integer.parseInt(appConfig.getProperty("board.size"));
             } catch (Exception e) {
-                System.out.println("Board size config not found, using default...");
+                log.debug("Board size config not found, using default...");
             }
 
             try {
                 spinnerSize = Integer.parseInt(appConfig.getProperty("spinner.size"));
             } catch (Exception e) {
-                System.out.println("Spinner size config not found, using default...");
+                log.debug("Spinner size config not found, using default...");
             }
 
             try {
                 numPlayers = Integer.parseInt(appConfig.getProperty("players.count"));
             } catch (Exception e) {
-                System.out.println("Player count config not found, using default...");
+                log.debug("Player count config not found, using default...");
             }
 
             try {
@@ -53,14 +56,14 @@ public class GameConfig {
             } catch (Exception e) {
                 // Default movement map has values up to 100, so the board size must be at least 100 to use that map
                 if (boardSize < 100) throw new IllegalArgumentException("Board size must be at least 100 to use default movement map");
-                System.out.println("Movement config not found, using default...");
+                log.debug("Movement config not found, using default...");
             }
 
             if (boardSize < 1 || numPlayers < 1 || spinnerSize < 1) {
                 throw new IllegalArgumentException("Configured values are not acceptable, please ensure the values make sense");
             }
         } catch (IOException e) {
-            System.out.println("Config file not found, using default properties");
+            log.debug("Config file not found, using default properties");
         }
     }
 
